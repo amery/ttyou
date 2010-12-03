@@ -3,6 +3,8 @@
 
 #define VIRTUAL_BUS_NAME	"virtual"
 
+static void virtual_bus_release(struct device *dev);
+
 static struct bus_type virtual_bus_type = {
 	.name = VIRTUAL_BUS_NAME,
 };
@@ -10,7 +12,13 @@ static struct bus_type virtual_bus_type = {
 static struct device virtual_bus = {
 	.bus = &virtual_bus_type,
 	.init_name = VIRTUAL_BUS_NAME,
+	.release = virtual_bus_release,
 };
+
+static void virtual_bus_release(struct device *dev)
+{
+	printk(KERN_NOTICE "virtual bus device released\n");
+}
 
 static int virtual_bus_init(void)
 {
