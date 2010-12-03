@@ -3,22 +3,21 @@
 
 #define VIRTUAL_BUS_NAME	"virtual"
 
-static struct bus_type bus_type = {
+static struct bus_type virtual_bus_type = {
 	.name = VIRTUAL_BUS_NAME,
 };
 
 static struct device virtual_bus = {
-	.bus = &bus_type,
+	.bus = &virtual_bus_type,
 	.init_name = VIRTUAL_BUS_NAME,
 };
 
 static int virtual_bus_init(void)
 {
-	int ret = bus_register(&bus_type);
-	if (ret)
+	int ret;
+	if ((ret = bus_register(&virtual_bus_type)))
 		return ret;
-	ret = device_register(&virtual_bus);
-	if (ret) {
+	if ((ret = device_register(&virtual_bus))) {
 		printk(KERN_NOTICE "failed to register virtual bus device\n");
 		return ret;
 	}
@@ -28,7 +27,7 @@ static int virtual_bus_init(void)
 static void virtual_bus_exit(void)
 {
 	device_unregister(&virtual_bus);
-	bus_unregister(&bus_type);
+	bus_unregister(&virtual_bus_type);
 }
 
 module_init(virtual_bus_init);
