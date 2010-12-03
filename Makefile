@@ -1,5 +1,5 @@
 ifneq ($(KERNELRELEASE),)
-obj-m := ttyou.o
+obj-m :=  virtual_bus.o ttyou.o
 else
 PWD := $(shell pwd)
 KERNELVER ?= $(shell uname -r)
