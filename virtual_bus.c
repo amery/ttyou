@@ -7,16 +7,27 @@ static struct bus_type bus_type = {
 	.name = VIRTUAL_BUS_NAME,
 };
 
+static struct device virtual_bus = {
+	.bus = &bus_type,
+	.init_name = VIRTUAL_BUS_NAME,
+};
+
 static int virtual_bus_init(void)
 {
 	int ret = bus_register(&bus_type);
 	if (ret)
 		return ret;
+	ret = device_register(&virtual_bus);
+	if (ret) {
+		printk(KERN_NOTICE "failed to register virtual bus device\n");
+		return ret;
+	}
 	return 0;
 }
 
 static void virtual_bus_exit(void)
 {
+	device_unregister(&virtual_bus);
 	bus_unregister(&bus_type);
 }
 
